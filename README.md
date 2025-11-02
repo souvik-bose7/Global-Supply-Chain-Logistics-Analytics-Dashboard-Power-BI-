@@ -180,22 +180,25 @@ Average Cost per Shipment = AVERAGE('Supply Chain Data'[Cost])
 
 Average Delivery Days = AVERAGE('Supply Chain Data'[AverageDeliveryTime])
 
-Average Emissions per Shipment = AVERAGE('Supply Chain Data'[Emissions])
+Avg Emissions per Shipment = DIVIDE(SUM('Supply Chain Data'[Emissions]), COUNTROWS('Supply Chain Data'), 0)
 
-Cost per Container =
-DIVIDE(SUM('Supply Chain Data'[Cost]), SUM('Supply Chain Data'[TotalShipments]))
+Cost per Container = AVERAGE('Supply Chain Data'[Cost])
 
-On-Time Delivery % = AVERAGE('Supply Chain Data'[OnTimeDeliveryRate])
+On-Time Delivery % = AVERAGE('Supply Chain Data'[OnTimeDeliveryRate])*100
 
-Operational Utilization Rate = AVERAGE('Supply Chain Data'[SatisfactionScore])
+Operational Utilization Rate = AVERAGE('Supply Chain Data'[DwellTimeAtTerminal])
 
-Profit per Route =
-SUM('Supply Chain Data'[Revenue]) - SUM('Supply Chain Data'[Cost])
+Profit per Route = SUM('Supply Chain Data'[Revenue]) - SUM('Supply Chain Data'[Cost])
 
-Route Performance Score % =
-AVERAGE('Supply Chain Data'[SustainabilityScore])
+Route Performance Score (%) = 
+VAR OnTimeRate = AVERAGE('Supply Chain Data'[OnTimeDeliveryRate])
+VAR Efficiency = AVERAGE('Supply Chain Data'[EstimatedEfficiencyImprovement])
+VAR Satisfaction = AVERAGE('Supply Chain Data'[SatisfactionScore])
+RETURN
+DIVIDE((OnTimeRate + Efficiency + Satisfaction), 3, 0)
 
-Delivery Delay Days = AVERAGE('Supply Chain Data'[ImpactOnDeliveryTime])
+
+DeliveryDelayDays = DATEDIFF('Supply Chain Data'[ShipmentDate],'Supply Chain Data'[DeliveryDate],DAY)
 ```
 
 ---
